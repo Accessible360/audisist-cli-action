@@ -1,0 +1,5 @@
+validate:
+  - url: https://example.com
+    options:
+      format: xunit
+      output: ./results/page.xml

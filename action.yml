@@ -1,0 +1,73 @@
+name: 'Audisist CLI Action'
+description: 'Run accessibility validations against your website'
+author: 'Allyant'
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  auth_token:
+    description: 'NPM token used to install @accessible360/audisist-cli'
+    required: true
+  license:
+    description: 'License token for @accessible360/audisist-cli'
+    required: true
+  cli_version:
+    description: 'Version of @accessible360/audisist-cli to install'
+    required: false
+    default: 'latest'
+  config:
+    description: 'Path to a JSON or YAML config file, or an inline JSON string'
+    required: false
+  debug:
+    description: 'Enable debug mode'
+    required: false
+    default: 'false'
+  url:
+    description: 'URL to scan'
+    required: false
+  cookies:
+    description: 'Cookies to include in the request, one per line in the format name=value'
+    required: false
+  headers:
+    description: 'Headers to include in the request, one per line in the format name: value'
+    required: false
+  format:
+    description: 'Output format (xunit, json, or silent)'
+    required: false
+  output:
+    description: 'Path to write scan results'
+    required: false
+  on_before_script:
+    description: 'Path to a JavaScript file to execute before validations'
+    required: false
+  ignore_response_code:
+    description: 'Allow validations to run regardless of the HTTP response code'
+    required: false
+    default: 'false'
+
+outputs:
+  outputs:
+    description: 'JSON array of absolute paths to result files written by the scan'
+    value: ${{ steps.validate.outputs.outputs }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        registry-url: 'https://npm.pkg.github.com'
+        scope: '@accessible360'
+
+    - name: Install Audisist CLI
+      shell: bash
+      run: npm install @accessible360/audisist-cli@${{ inputs.cli_version }}
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.auth_token }}
+
+    - name: Run accessibility validations
+      id: validate
+      shell: bash
+      run: node "${{ github.action_path }}/dist/index.js"

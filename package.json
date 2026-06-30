@@ -1,0 +1,27 @@
+{
+  "name": "audisist-cli-action",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GitHub Action wrapper for audisist-cli accessibility scanning",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build lib/index.js -o dist --source-map --license licenses.txt",
+    "prepare": "npm run build && husky install",
+    "test": "node --test lib/**/*.test.js",
+    "test:watch": "node --test --watch lib/**/*.test.js"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/exec": "^1.1.1",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "3.9.4"
+  },
+  "lint-staged": {
+    "lib/**/*.{js,json,yml,yaml}": "prettier --write"
+  }
+}

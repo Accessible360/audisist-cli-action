@@ -1,0 +1,24 @@
+{
+  "validate": [
+    {
+      "url": "https://example.com",
+      "options": {
+        "format": "json",
+        "output": "./results/home.json"
+      }
+    },
+    {
+      "url": "https://example.com/about",
+      "skip": true,
+      "options": {
+        "output": "./results/about.json"
+      }
+    },
+    {
+      "url": "https://example.com/contact",
+      "options": {
+        "output": "./results/contact.json"
+      }
+    }
+  ]
+}

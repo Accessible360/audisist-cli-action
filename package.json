@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "ncc build lib/index.js -o dist --source-map --license licenses.txt",
-    "prepare": "npm run build && husky install",
+    "prepare": "npm run build && husky",
     "test": "node --test lib/**/*.test.js",
     "test:watch": "node --test --watch lib/**/*.test.js"
   },

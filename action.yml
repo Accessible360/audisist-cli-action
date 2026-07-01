@@ -71,3 +71,15 @@ runs:
       id: validate
       shell: bash
       run: node "${{ github.action_path }}/dist/index.js"
+      # Composite actions do not auto-populate INPUT_* env vars for @actions/core
+      env:
+        INPUT_LICENSE: ${{ inputs.license }}
+        INPUT_CONFIG: ${{ inputs.config }}
+        INPUT_DEBUG: ${{ inputs.debug }}
+        INPUT_URL: ${{ inputs.url }}
+        INPUT_COOKIES: ${{ inputs.cookies }}
+        INPUT_HEADERS: ${{ inputs.headers }}
+        INPUT_FORMAT: ${{ inputs.format }}
+        INPUT_OUTPUT: ${{ inputs.output }}
+        INPUT_ON_BEFORE_SCRIPT: ${{ inputs.on_before_script }}
+        INPUT_IGNORE_RESPONSE_CODE: ${{ inputs.ignore_response_code }}

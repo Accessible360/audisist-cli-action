@@ -12,7 +12,7 @@ const core = __nccwpck_require__(7484);
 const exec = __nccwpck_require__(5236);
 
 function isTruthy(value) {
-  return value === 'true';
+  return value === "true";
 }
 
 function parseLines(value) {
@@ -34,7 +34,7 @@ function resolveWorkspacePath(filePath) {
 
 function resolveConfig(config) {
   if (/^\s*[\[{]/.test(config)) {
-    const configFile = path.join(os.tmpdir(), 'audisist-config.json');
+    const configFile = path.join(os.tmpdir(), "audisist-config.json");
     fs.writeFileSync(configFile, config);
     return configFile;
   }
@@ -48,7 +48,7 @@ function parseConfigInput(configInput) {
   }
 
   const configPath = resolveWorkspacePath(configInput);
-  const content = fs.readFileSync(configPath, 'utf8');
+  const content = fs.readFileSync(configPath, "utf8");
 
   if (/\.ya?ml$/i.test(configPath)) {
     return yaml.load(content);
@@ -61,7 +61,7 @@ function parseConfigInput(configInput) {
   }
 }
 
-function collectExpectedOutputs({ config, output }) {
+function collectExpectedOutputs({config, output}) {
   const outputs = [];
 
   if (config) {
@@ -86,68 +86,68 @@ function collectExpectedOutputs({ config, output }) {
 }
 
 function buildCommand(options) {
-  const cmd = ['npx', 'audisist-cli'];
+  const cmd = ["npx", "audisist-cli"];
 
   if (options.debug) {
-    cmd.push('--debug');
+    cmd.push("--debug");
   }
 
-  cmd.push('--license', options.license);
+  cmd.push("--license", options.license);
 
   if (options.config) {
-    cmd.push('--config', resolveConfig(options.config));
+    cmd.push("--config", resolveConfig(options.config));
   }
 
-  cmd.push('validate');
+  cmd.push("validate");
 
   if (options.url) {
     cmd.push(options.url);
   }
 
   if (options.format) {
-    cmd.push('-f', options.format);
+    cmd.push("-f", options.format);
   }
 
   if (options.output) {
-    cmd.push('-o', options.output);
+    cmd.push("-o", options.output);
   }
 
   for (const cookie of options.cookies) {
-    cmd.push('-c', cookie);
+    cmd.push("-c", cookie);
   }
 
   for (const header of options.headers) {
-    cmd.push('-H', header);
+    cmd.push("-H", header);
   }
 
   if (options.onBeforeScript) {
-    cmd.push('--onBeforeScript', options.onBeforeScript);
+    cmd.push("--onBeforeScript", options.onBeforeScript);
   }
 
   if (options.ignoreResponseCode) {
-    cmd.push('--ignoreResponseCode');
+    cmd.push("--ignoreResponseCode");
   }
 
   return cmd;
 }
 
 function setActionOutputs(outputPaths) {
-  core.setOutput('outputs', JSON.stringify(outputPaths));
+  core.setOutput("outputs", JSON.stringify(outputPaths));
 }
 
 async function run() {
-  const license = core.getInput('license', { required: true });
-  const config = core.getInput('config');
-  const debug = isTruthy(core.getInput('debug'));
-  const url = core.getInput('url');
-  const cookies = parseLines(core.getInput('cookies'));
-  const headers = parseLines(core.getInput('headers'));
-  const format = core.getInput('format');
-  const output = core.getInput('output');
-  const onBeforeScript = core.getInput('on_before_script');
-  const ignoreResponseCode = isTruthy(core.getInput('ignore_response_code'));
+  const license = core.getInput("license", {required: true});
+  const config = core.getInput("config");
+  const debug = isTruthy(core.getInput("debug"));
+  const url = core.getInput("url");
+  const cookies = parseLines(core.getInput("cookies"));
+  const headers = parseLines(core.getInput("headers"));
+  const format = core.getInput("format");
+  const output = core.getInput("output");
+  const onBeforeScript = core.getInput("on_before_script");
+  const ignoreResponseCode = isTruthy(core.getInput("ignore_response_code"));
 
-  const expectedOutputs = collectExpectedOutputs({ config, output });
+  const expectedOutputs = collectExpectedOutputs({config, output});
   const cmd = buildCommand({
     license,
     config,
@@ -161,7 +161,7 @@ async function run() {
     ignoreResponseCode,
   });
 
-  core.info(`Running: ${cmd.join(' ')}`);
+  core.info(`Running: ${cmd.join(" ")}`);
 
   const exitCode = await exec.exec(cmd[0], cmd.slice(1), {
     silent: !debug,
@@ -172,13 +172,20 @@ async function run() {
     return;
   }
 
-  const writtenOutputs = expectedOutputs.filter((filePath) => fs.existsSync(filePath));
+  const writtenOutputs = expectedOutputs.filter((filePath) =>
+    fs.existsSync(filePath)
+  );
 
-  if (expectedOutputs.length && writtenOutputs.length < expectedOutputs.length) {
+  if (
+    expectedOutputs.length &&
+    writtenOutputs.length < expectedOutputs.length
+  ) {
     const missing = expectedOutputs
       .filter((filePath) => !fs.existsSync(filePath))
-      .join(', ');
-    core.warning(`Expected result file(s) were not found after the scan: ${missing}`);
+      .join(", ");
+    core.warning(
+      `Expected result file(s) were not found after the scan: ${missing}`
+    );
   }
 
   setActionOutputs(writtenOutputs);

@@ -57,7 +57,7 @@ Note: If `output` is not set, results are printed to the workflow log (stdout)
 | `ignore_response_code` | No | `false` | Run validations regardless of the HTTP response code |
 | `debug` | No | `false` | Enable debug mode |
 
-**Config vs. individual inputs:** Use `config` when you want to scan multiple pages — it is the recommended approach. For a single-page scan, skip `config` and set `url` (required) along with any other inputs you need, such as `format`, `output`, `cookies`, or `headers`.
+**Config vs. individual inputs:** Use `config` when you want to scan multiple pages — it is the recommended approach. For a single-page scan, skip `config` and set `url` (required) along with any other inputs you need, such as `format`, `output`, `cookie`, or `header`.
 
 ## Outputs
 
@@ -144,6 +144,29 @@ Reference it in your workflow:
             "options": {
               "format": "json",
               "output": "./results.json"
+            }
+          }
+        ]
+      }
+```
+
+### Inline JSON config with Cookies and Headers
+
+```yaml
+- uses: Accessible360/audisist-cli-action@v1
+  with:
+    auth_token: ${{ secrets.AUDISIST_NPM_TOKEN }}
+    license: ${{ secrets.AUDISIST_LICENSE }}
+    config: |
+      {
+        "validate": [
+          {
+            "url": "https://example.com",
+            "options": {
+              "format": "json",
+              "output": "./results.json",
+              "cookie": ["name=value", "name2=value2"],
+              "header": ["Authorization: Bearer token", "x-custom-header: value"]
             }
           }
         ]

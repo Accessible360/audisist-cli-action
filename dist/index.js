@@ -86,7 +86,7 @@ function collectExpectedOutputs({config, output}) {
 }
 
 function buildCommand(options) {
-  const cmd = ["npx", "audisist-cli"];
+  const cmd = ["audisist-cli"];
 
   if (options.debug) {
     cmd.push("--debug");

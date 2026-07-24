@@ -66,7 +66,14 @@ runs:
 
     - name: Install Audisist CLI
       shell: bash
-      run: npm install @accessible360/audisist-cli@${{ inputs.cli_version }}
+      run: |
+        # Install into an isolated prefix so we never touch the consumer's
+        # package.json / lockfile. Running `npm install` in a pnpm/yarn
+        # workspace (e.g. with workspace:* deps) would fail or corrupt it.
+        INSTALL_DIR="${RUNNER_TEMP}/audisist-cli"
+        mkdir -p "$INSTALL_DIR"
+        npm install --prefix "$INSTALL_DIR" "@accessible360/audisist-cli@${{ inputs.cli_version }}"
+        echo "$INSTALL_DIR/node_modules/.bin" >> "$GITHUB_PATH"
       env:
         NODE_AUTH_TOKEN: ${{ inputs.auth_token }}
 

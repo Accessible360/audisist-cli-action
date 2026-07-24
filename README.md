@@ -55,6 +55,7 @@ Note: If `output` is not set, results are printed to the workflow log (stdout)
 | `headers` | No | — | Headers to include, one per line (`name: value`) |
 | `on_before_script` | No | — | Path to a JavaScript file to run before validations |
 | `ignore_response_code` | No | `false` | Run validations regardless of the HTTP response code |
+| `fail_on` | No | — | Fail the scan when issues at or above this priority are found (`P1`, `P2`, or `P3`) |
 | `debug` | No | `false` | Enable debug mode |
 
 **Config vs. individual inputs:** Use `config` when you want to scan multiple pages — it is the recommended approach. For a single-page scan, skip `config` and set `url` (required) along with any other inputs you need, such as `format`, `output`, `cookie`, or `header`.
@@ -226,6 +227,7 @@ validate:
         - 'Authorization: Bearer token'
       onBeforeScript: ./prepare.js    # optional
       ignoreResponseCode: true        # optional
+      failOn: P1                      # optional, P1 | P2 | P3
 ```
 
 ## Advanced usage

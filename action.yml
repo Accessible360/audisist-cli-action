@@ -45,6 +45,9 @@ inputs:
     description: 'Allow validations to run regardless of the HTTP response code'
     required: false
     default: 'false'
+  fail_on:
+    description: 'Fail the scan when issues at or above this priority are found (P1, P2, or P3)'
+    required: false
 
 outputs:
   outputs:
@@ -83,3 +86,4 @@ runs:
         INPUT_OUTPUT: ${{ inputs.output }}
         INPUT_ON_BEFORE_SCRIPT: ${{ inputs.on_before_script }}
         INPUT_IGNORE_RESPONSE_CODE: ${{ inputs.ignore_response_code }}
+        INPUT_FAIL_ON: ${{ inputs.fail_on }}

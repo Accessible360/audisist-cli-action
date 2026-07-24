@@ -128,6 +128,10 @@ function buildCommand(options) {
     cmd.push("--ignoreResponseCode");
   }
 
+  if (options.failOn) {
+    cmd.push("--fail-on", options.failOn);
+  }
+
   return cmd;
 }
 
@@ -146,6 +150,7 @@ async function run() {
   const output = core.getInput("output");
   const onBeforeScript = core.getInput("on_before_script");
   const ignoreResponseCode = isTruthy(core.getInput("ignore_response_code"));
+  const failOn = core.getInput("fail_on");
 
   const expectedOutputs = collectExpectedOutputs({config, output});
   const cmd = buildCommand({
@@ -159,6 +164,7 @@ async function run() {
     output,
     onBeforeScript,
     ignoreResponseCode,
+    failOn,
   });
 
   core.info(`Running: ${cmd.join(" ")}`);
